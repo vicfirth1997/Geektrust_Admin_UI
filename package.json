@@ -1,0 +1,33 @@
+{
+  "name": "geektrust_challenge_revised",
+  "version": "1.0.0",
+  "description": "Admin UI GeekTrust Challenge",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "Yash Mundra",
+  "license": "ISC",
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.9.3",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.7",
+    "@mui/material": "^5.14.7",
+    "@mui/styled-engine-sc": "^5.14.7",
+    "axios": "^1.5.0",
+    "bootstrap": "^5.3.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0",
+    "styled-components": "^5.3.11"
+  }
+}

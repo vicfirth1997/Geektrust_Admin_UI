@@ -10,7 +10,6 @@ const API_URL=
     'https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json'
     
 function Records() {
-console.log('in Records...')
 
 const [records,setRecords] = useState([])
 const [filteredRecords,setFilteredRecords] = useState([])
@@ -18,14 +17,12 @@ const [currentPage,setCurrentPage] = useState(1)
 const [searchText,setSearchText] = useState('')
 const [selectedRows,setSelectedRows] =useState([])
 
-console.log(records,filteredRecords)
 const recordsPerPage=10
 
 
 useEffect(()=>{
     async function fetchRecords() {
             try{
-                console.log('in use Effect')
                 const records = await axios.get(API_URL)
                 if(records!==null || records.length>0) {
                 setRecords(records.data)
@@ -113,7 +110,6 @@ const totalPages = Math.ceil(filteredRecords.length/recordsPerPage)
 const indexOfLastRecord = currentPage*recordsPerPage
 const indexOfirstRecord = indexOfLastRecord-recordsPerPage
 const currentRecords = filteredRecords.slice(indexOfirstRecord,indexOfLastRecord)
-
 
     return(        
         <>

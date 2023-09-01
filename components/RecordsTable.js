@@ -4,7 +4,8 @@ import React, {useState} from 'react';
 import EditableRows from './EditableRows';
 
 function RecordsTable({records,setFilteredRecords,setRecords,selectedRows,handleRowSelection,handleDelete,handleSelectAllRows,setCurrentPage,fullRecords}) {
-    console.log('in Records table ...')
+  
+    
     const [editRecordId,setEditRecordId] =useState(null) 
     const [ editFormData,setEditFormData] = useState({
         name:'',

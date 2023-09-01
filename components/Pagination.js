@@ -17,7 +17,6 @@ function Pagination(
     )
     
     {
-        // console.log('in Pagination...')
     const [disabledPrev,setDisabledPrev] = useState('')
     const [disabledNext,setDisabledNext] = useState('')
     const pageNumbers=[...Array(totalPages+1).keys()].slice(1)
@@ -34,23 +33,37 @@ function Pagination(
         }
     }
     function prevPage() {
+        console.log(currentPage)
         if(currentPage!==1) {
             setCurrentPage((prevPage)=>prevPage-1)
             setDisabledPrev('')
             setDisabledNext('')
         }
         else if(currentPage==1){
+            console.log('I AM 1')
            setDisabledPrev('disabled')
         }
 
     }
     function handlePagination(e) {
-        setCurrentPage(e.target.id)
+        if(e.target.id===1) {
+            return
+        }
+        else {
+            setCurrentPage((prevPage)=>{
+                if(prevPage>e.target.id) {
+                    return prevPage-(prevPage-e.target.id)
+                } else {
+                    return prevPage+(e.target.id-prevPage)
+                }
+            })
+        }
         if(e.target.id==totalPages) {
             setDisabledNext('disbaled')
             setDisabledPrev('')
         }else {
             setDisabledPrev('')
+            setDisabledNext('')
         }
     }
     function toFirstPage() {

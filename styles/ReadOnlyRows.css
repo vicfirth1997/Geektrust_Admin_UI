@@ -1,0 +1,14 @@
+.selected{
+    background-color: grey !important;
+    color: white !important;
+}
+.action-buttons{
+    display: flex;
+    justify-content: space-evenly;
+}
+.edit-btn{
+    color: black;
+}
+.delete-btn{
+    color:red
+}

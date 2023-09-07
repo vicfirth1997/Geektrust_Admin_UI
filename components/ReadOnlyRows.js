@@ -1,7 +1,66 @@
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './styles/ReadOnlyRows.css'
-function ReadOnlyRows({record,selected,handleRowSelection,handleEdit,handleDelete}) {
+import { useSnackbar } from 'notistack';
+import { useState } from 'react';
+
+function ReadOnlyRows({
+    record,
+    records,
+    setRecords,
+    setFilteredRecords,
+    setCurrentPage,
+    selectedRows,
+    setSelectedRows,
+    selected,
+    handleRowSelection,
+    handleEdit,
+    handleDelete
+}) {
+
+   const {enqueueSnackbar} = useSnackbar()
+
+
+function getAfterDeletionRecords(records) {
+    const afterDeletionRecords = records.filter(
+        (record)=>!selectedRows.includes(record.id)
+    )
+    return afterDeletionRecords
+}
+
+function isRowSelected(id) {
+   const result=selectedRows.includes(id)?true:false
+   return result
+}
+
+ function handleDelete(id) {
+   
+    if(!isRowSelected(id)) {
+        enqueueSnackbar('Please select a Row to delete!',{variant:'warning',autoHideDuration:2000,preventDuplicate:true})
+        return
+    }
+    const afterDeletionRecords=getAfterDeletionRecords(records)
+    enqueueSnackbar('Selected row Deleted!',{variant:'success',autoHideDuration:2000})
+    setRecords(afterDeletionRecords)
+    setFilteredRecords(afterDeletionRecords)
+    setCurrentPage(1)
+    setSelectedRows([])
+    
+
+}
+
+function handleRowSelection(e,id) {
+
+    if(e.target.checked) {
+        setSelectedRows((prevSelectedRows)=>[...prevSelectedRows,id])
+    }
+    else {
+        setSelectedRows((prevSelectedRows)=>
+            prevSelectedRows.filter((recordId)=>recordId!==id)
+        )
+    }
+}
+
     return(
         <tr>
             <td className={selected===true?'selected':''}>

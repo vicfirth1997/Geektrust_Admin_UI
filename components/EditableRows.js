@@ -1,13 +1,36 @@
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-function EditableRows({record
+function EditableRows({
+    record
     ,selected
-    ,handleRowSelection
     ,editFormData
     ,handleCancelClick
-    ,handleEditFormChange}) 
+    ,setEditFormData
+}) 
     {
+
+        function handleRowSelection(e,id) {
+            e.target.checked?
+            setSelectedRows((prevSelectedRows)=>[...prevSelectedRows,id]):
+            prevSelectedRows.filter((recordId)=>recordId!==id)
+        }
+
+        function getEditedFieldAndValue(e) {
+            const editedRowField = e.target.getAttribute('name')
+            const editedValue = e.target.value
+            return[editedRowField,editedValue]
+        }
+
+        function handleEditFormChange(e) {
+            e.preventDefault()
+          const  [editedRowField,editedValue] = getEditedFieldAndValue(e)
+            setEditFormData({
+                ...editFormData,
+                [editedRowField]:editedValue
+            })
+        }
+
     return(
         <tr>
              <td className={selected===true?'selected':''}>

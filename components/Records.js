@@ -4,7 +4,7 @@ import DeleteSelectedRows from './DeleteSelectedRows';
 import RecordsTable from './RecordsTable';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
-
+import {useSnackbar } from "notistack";
 
 const API_URL=
     'https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json'
@@ -14,9 +14,9 @@ function Records() {
 const [records,setRecords] = useState([])
 const [filteredRecords,setFilteredRecords] = useState([])
 const [currentPage,setCurrentPage] = useState(1)
-const [searchText,setSearchText] = useState('')
 const [selectedRows,setSelectedRows] =useState([])
 
+const {enqueueSnackbar} = useSnackbar()
 const recordsPerPage=10
 
 
@@ -30,123 +30,52 @@ useEffect(()=>{
             }
             } 
             catch(error) {
-                console.log(error)
+              enqueueSnackbar('Problem in serving data from the server!!!',{variant:'error',autoHideDuration:2000,preventDuplicate:true})
             }
             
     }
     fetchRecords()
 },[])
 
-function handleSearch(e) {
-   
-    const query = e.target.value
-    setSearchText(query)
-    const filtered=records.filter((record)=>{
-    return(
-        record.name.toLowerCase().includes(query.toLowerCase()) ||
-        record.email.toLowerCase().includes(query.toLowerCase()) ||
-        record.role.toLowerCase().includes(query.toLowerCase())
-    )
-      
-    })
-    filtered.length===0?setFilteredRecords(records):setFilteredRecords(filtered)
-    setCurrentPage(1)
-   
-}
-
-function handleRowSelection(e,id) {
-
-    if(e.target.checked) {
-        setSelectedRows((prevSelectedRows)=>[...prevSelectedRows,id])
-    }
-    else {
-        setSelectedRows((prevSelectedRows)=>
-            prevSelectedRows.filter((recordId)=>recordId!==id)
-        )
-    }
-}
-
-function handleDelete(id) {
-    if(!selectedRows.includes(id)) {
-        alert('Please select a Row to delete!')
-        return
-    }
-    
-    const afterDeletionRecords = records.filter(
-        (record)=>!selectedRows.includes(record.id)
-    )
-    console.log(afterDeletionRecords)
-    setRecords(afterDeletionRecords)
-    setFilteredRecords(afterDeletionRecords)
-    setCurrentPage(1)
-    setSelectedRows([])
-    
-
-}
-
-function handleSelectAllRows(e) {
-    const allRecordsIdsForThePage=currentRecords.map((record)=>record.id)
-    if(e.target.checked===true && selectedRows.length!==allRecordsIdsForThePage.length) {
-        setSelectedRows(allRecordsIdsForThePage)
-    }
-    else {
-        setSelectedRows([])
-    }
-}
-
-function handleDeleteSelected() {
-    console.log('in here')
-    const afterDeletionRecords = records.filter(
-        (record)=>!selectedRows.includes(record.id)
-    )
-    console.log(afterDeletionRecords)
-    setRecords(afterDeletionRecords)
-    setFilteredRecords(afterDeletionRecords)
-    setCurrentPage(1)
-    setSelectedRows([])
-}
-
 const totalPages = Math.ceil(filteredRecords.length/recordsPerPage)
 const indexOfLastRecord = currentPage*recordsPerPage
 const indexOfirstRecord = indexOfLastRecord-recordsPerPage
 const currentRecords = filteredRecords.slice(indexOfirstRecord,indexOfLastRecord)
 
-    return(        
-        <>
-        {
+if(currentRecords.length===0 && records.length===0) return ('')
 
-        currentRecords.length>0?(
+    return(        
+        
                     <>
                     <SearchBar 
-                    searchText={searchText} 
-                    handleSearch={handleSearch}
+                    setCurrentPage={setCurrentPage}
+                    setFilteredRecords={setFilteredRecords}
+                    records={records}
                     />
                     <RecordsTable
                     records={currentRecords}
                     setFilteredRecords={setFilteredRecords}
                     setRecords={setRecords}
                     selectedRows={selectedRows}
-                    handleRowSelection={handleRowSelection}
-                    handleDelete={handleDelete}
-                    handleSelectAllRows={handleSelectAllRows}
                     setCurrentPage={setCurrentPage}
                     fullRecords={records}
+                    setSelectedRows={setSelectedRows}
                     /> 
                     <Pagination
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        totalPages={totalPages}
-                        />
-                        <DeleteSelectedRows
-                        handleDeleteSelected={handleDeleteSelected}
-                        selectedRows={selectedRows}
-                        />
-                        </>
-                   
-                        )
-                        :''
-        }     
-       </>
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    />
+                    <DeleteSelectedRows
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                    records={records}
+                    setRecords={setRecords}
+                    setFilteredRecords={setFilteredRecords}
+                    setCurrentPage={setCurrentPage}
+                    />
+                    </>
+       
               
     )
 }

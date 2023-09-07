@@ -3,6 +3,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import Container from 'react-bootstrap/Container';
 import './styles/Pagination.css'
 import {useState} from 'react'
 
@@ -21,66 +22,87 @@ function Pagination(
     const [disabledNext,setDisabledNext] = useState('')
     const pageNumbers=[...Array(totalPages+1).keys()].slice(1)
 
-
-    function nextPage() {
-        if(currentPage!==totalPages) {
-            setCurrentPage((prevPage)=>prevPage+1)
-            setDisabledPrev('')
-        } 
-        else {
-            setDisabledNext('disabled')
-            
-        }
+    function removeExtremePrevButtonsFromDisable() {
+        setDisabledPrev('')
+        return
     }
-    function prevPage() {
-        console.log(currentPage)
-        if(currentPage!==1) {
-            setCurrentPage((prevPage)=>prevPage-1)
-            setDisabledPrev('')
-            setDisabledNext('')
-        }
-        else if(currentPage==1){
-            console.log('I AM 1')
-           setDisabledPrev('disabled')
-        }
 
+    function removeExtremeNextButtonsFromDisbale() {
+        setDisabledNext('')
+        return
+    }
+
+    function disablePrevAndToFirstButtons() {
+        setDisabledPrev('disabled')
+        return
+    }
+    function disableNextAndToLastButtons() {
+        setDisabledNext('disable')
+        return
+    }
+    function removeExtremeButtonsFromDisable() {
+        setDisabledNext('')
+        setDisabledPrev('')
+        return
+    }
+    function handlePagesExceptFirstAndLast(e) {
+        setCurrentPage((prevPage)=>{
+            if(prevPage>e.target.id) {
+                return prevPage-(prevPage-e.target.id)
+            } else {
+                return prevPage+(e.target.id-prevPage)
+            }
+        })
+        removeExtremeButtonsFromDisable()
+        return
     }
     function handlePagination(e) {
-        if(e.target.id===1) {
+        if(e.target.id==1) {
+            disablePrevAndToFirstButtons()
+            removeExtremeNextButtonsFromDisbale()
+            return
+        }
+        else if(e.target.id==totalPages) {
+            disableNextAndToLastButtons()
+            removeExtremePrevButtonsFromDisable()
             return
         }
         else {
-            setCurrentPage((prevPage)=>{
-                if(prevPage>e.target.id) {
-                    return prevPage-(prevPage-e.target.id)
-                } else {
-                    return prevPage+(e.target.id-prevPage)
-                }
-            })
-        }
-        if(e.target.id==totalPages) {
-            setDisabledNext('disbaled')
-            setDisabledPrev('')
-        }else {
-            setDisabledPrev('')
-            setDisabledNext('')
+            handlePagesExceptFirstAndLast(e)
         }
     }
     function toFirstPage() {
         setCurrentPage(1)
-        setDisabledPrev('disabled')
-        if(currentPage==totalPages) {
-            setDisabledNext('')
+        disablePrevAndToFirstButtons()
+        removeExtremeNextButtonsFromDisbale()
+       
+    }
+    function prevPage() {
+        if(currentPage==1) {
+            disablePrevAndToFirstButtons()
+            removeExtremeNextButtonsFromDisbale()
+        }
+        else {
+            setCurrentPage((prevPage)=>prevPage-1)
+            removeExtremePrevButtonsFromDisable()
+            removeExtremeNextButtonsFromDisbale()
         }
     }
     function toLastPage() {
         setCurrentPage(totalPages)
-        setDisabledNext('disabled')
-        if(currentPage===1) {
-            setDisabledPrev('')
-            setDisabledNext('')
+        disableNextAndToLastButtons()
+        removeExtremePrevButtonsFromDisable()
+    }
+    function nextPage() {
+        if(currentPage==totalPages) {
+            disableNextAndToLastButtons()
+            removeExtremePrevButtonsFromDisable()
         }
-       
+        else {
+            setCurrentPage((prevPage)=>prevPage+1)
+            removeExtremeNextButtonsFromDisbale()
+            removeExtremePrevButtonsFromDisable()
+        }
     }
 
     return(
@@ -88,8 +110,8 @@ function Pagination(
     
         <ul className='page-container'>
             <div className='btn-container'>
-            <li className='btn'><Button size='mb-2' variant='primary' onClick={toFirstPage} disabled={disabledPrev}><SkipPreviousIcon/></Button></li>
-            <li className='btn'><Button size='mb-2'variant='primary' onClick={prevPage} disabled={disabledPrev}><ArrowBackIosIcon/></Button></li>
+            <li className='btn'><Button size='mb-2' variant='primary' onClick={toFirstPage} disabled={disabledPrev} ><SkipPreviousIcon/></Button></li>
+            <li className='btn'><Button size='mb-2'variant='primary' onClick={prevPage} disabled={disabledPrev} ><ArrowBackIosIcon/></Button></li>
             {
                 pageNumbers.map((page)=>{
                     return(

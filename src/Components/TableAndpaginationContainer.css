@@ -1,0 +1,47 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.loading{
+    margin-top: 7rem;
+    display: flex;
+    justify-content: center;
+}
+.deleteselected-btn{
+    background-color: #ff5171;
+    color: white;
+    border-radius: 1rem;
+    border: none;
+    height: 2rem;
+    padding: 0.5px 1rem;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+.pagination-deleteselected-container{
+    margin-left: 5%;
+    padding-top: 1rem;
+}
+
+.empty-records{
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (min-width: 768px) {
+    .deleteselected-btn{
+        margin-right: 7rem;
+    }
+    .pagination-deleteselected-container{
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media only screen and (max-width: 888px) {
+    .pagination-deleteselected-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

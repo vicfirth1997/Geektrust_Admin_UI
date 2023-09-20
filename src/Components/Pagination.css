@@ -1,0 +1,29 @@
+.button-page{
+    border: 1px solid #1890ff;
+    color: #1890ff;
+    background-color: white;
+}
+.container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.container .button-page{
+    border: 1px solid #1890ff;
+    color: #1890ff;
+    background-color: white;
+}
+.container button {
+  border-radius: 50%;
+  color: white;
+  background-color: #1890ff;
+  border: none;
+  height: 2rem;
+  width: 2rem;
+  margin: 0.5rem;
+  cursor: pointer;
+  box-sizing: content-box;
+}
+ .disable{
+    color: black !important;
+    background-color:#e9e9e9!important;
+}
